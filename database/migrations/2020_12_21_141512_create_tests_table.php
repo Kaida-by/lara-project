@@ -14,8 +14,18 @@ class CreateTestsTable extends Migration
     public function up()
     {
         Schema::create('tests', function (Blueprint $table) {
-            $table->id();
+            $table->bigIncrements('test_id');
+            $table->bigInteger('topics_id')->unsigned();
+            $table->string('question');
+            $table->string('answer_1');
+            $table->string('answer_2')->nullable();
+            $table->string('answer_3')->nullable();
+            $table->string('answer_4')->nullable();
+            $table->string('answer_5')->nullable();
+            $table->string('true');
             $table->timestamps();
+
+            $table->foreign('topics_id')->references('topic_id')->on('topics')->onDelete('cascade');
         });
     }
 
