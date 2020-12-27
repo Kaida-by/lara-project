@@ -13,7 +13,7 @@ class CreateUsersCoursesTable extends Migration
      */
     public function up()
     {
-        Schema::create('users_courses', function (Blueprint $table) {
+        Schema::create('course_user', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('course_id');
@@ -29,6 +29,6 @@ class CreateUsersCoursesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('users_courses');
+        Schema::dropIfExists('course_user');
     }
 }
