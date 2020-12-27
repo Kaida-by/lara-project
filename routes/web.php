@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,9 +14,17 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', 'CourseController@index');
+Route::get('course/', 'CourseController@index')->name('course.index');
+Route::get('course/create', 'CourseController@create')->name('course.create');
+Route::post('course/', 'CourseController@store')->name('course.store');
+Route::get('course/show/{id}', 'CourseController@show')->name('course.show');
+Route::get('course/edit/{id}', 'CourseController@edit')->name('course.edit');
+Route::patch('course/show/{id}', 'CourseController@update')->name('course.update');
+Route::delete('course/{id}', 'CourseController@destroy')->name('course.destroy');
+
+Route::get('courses/record/{id}', 'CourseController@record')->name('course.record');
+Route::post('course/show/{id}', 'CourseController@recordAct')->name('course.recordAct');
 
 Auth::routes();
 
