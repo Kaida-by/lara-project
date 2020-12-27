@@ -14,17 +14,20 @@
 
                     <div class="card-btn">
                         <a href="{{ route('course.index') }}" class="btn btn-outline-primary">На главную</a>
-                        <a href="{{ route('course.edit', ['id' => $course->course_id]) }}" class="btn btn-outline-warning">Редактировать</a>
-                        <form action="{{ route('course.destroy', ['id' => $course->course_id]) }}" method="post"
-                              onsubmit="if (confirm('Вы точно хотите удалить курс?')) { return true } else { return false }">
-                            @csrf
-                            @method('DELETE')
-                            <input type="submit" class="btn btn-outline-danger" value="Удалить">
-                        </form>
+                        @auth
+                            @if(\Illuminate\Support\Facades\Auth::user()->id == $course->teacher_id)
+                                <a href="{{ route('course.edit', ['id' => $course->course_id]) }}" class="btn btn-outline-warning">Редактировать</a>
+                                <form action="{{ route('course.destroy', ['id' => $course->course_id]) }}" method="post"
+                                      onsubmit="if (confirm('Вы точно хотите удалить курс?')) { return true } else { return false }">
+                                    @csrf
+                                    @method('DELETE')
+                                    <input type="submit" class="btn btn-outline-danger" value="Удалить">
+                                </form>
+                            @endif
+                        @endauth
                     </div>
                 </div>
             </div>
         </div>
-        <a href="{{ route('test.index', ['id' => $course->course_id]) }}" class="btn btn-outline-success">Перейти к тестам</a>
     </div>
 @endsection

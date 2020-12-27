@@ -86,11 +86,11 @@ class CourseController extends Controller
         $course = Course::join('users', 'teacher_id', '=', 'users.id')
             ->find($id);
 
-        $tests = Course::join('tests', 'course_id', '=', 'tests.courses_id')
-            ->where('tests.courses_id', '=', $id)
+        $topics = Course::join('topics', 'course_id', '=', 'topics.courses_id')
+            ->where('topics.courses_id', '=', $id)
             ->get();
 
-        return view('courses.show', compact('course', 'tests', 'resultCourses'));
+        return view('courses.show', compact('course', 'topics', 'resultCourses'));
     }
 
     /**
