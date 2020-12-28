@@ -29,5 +29,10 @@
                 </div>
             </div>
         </div>
+        @if($resultCourses)
+            <a href="{{ route('topic.index', ['id' => $course->course_id]) }}" class="btn btn-outline-success">Перейти к темам</a>
+        @else
+            <a href="{{ route('course.record', ['id' => $course->course_id]) }}" class="btn btn-outline-success">Записаться на курс</a>
+        @endif
     </div>
 @endsection

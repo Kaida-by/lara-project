@@ -26,6 +26,11 @@ Route::delete('course/{id}', 'CourseController@destroy')->name('course.destroy')
 Route::get('courses/record/{id}', 'CourseController@record')->name('course.record');
 Route::post('course/show/{id}', 'CourseController@recordAct')->name('course.recordAct');
 
+Route::get('topic/index/{id}', 'TopicController@index')->name('topic.index');
+Route::get('topic/show/{id}', 'TopicController@show')->name('topic.show');
+Route::get('topic/create/{id}', 'TopicController@create')->name('topic.create');
+Route::post('topic/show/{id}', 'TopicController@store')->name('topic.store');
+
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
