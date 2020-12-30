@@ -65,7 +65,7 @@ class TopicController extends Controller
         $topic->title_top = $request->title;
         $topic->descr_top = $request->descr;
         $topic->deadline = $request->deadline;
-        $topic->active = $request->access ?? 'off';
+        $topic->active = $request->access ?? '';
         $topic->save();
 
         return redirect()->route('topic.index', compact('id'))->with('success', 'Тема успешно добавлена!');
@@ -75,22 +75,31 @@ class TopicController extends Controller
      * Display the specified resource.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Http\Response|\Illuminate\View\View
      */
     public function show($id)
     {
-        //
+        $topic = Topic::find($id);
+
+        return view('topics.show', compact('topic'));
     }
 
     /**
      * Show the form for editing the specified resource.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\View\View
      */
     public function edit($id)
     {
-        //
+        $topic = Topic::find($id);
+        $course = Course::find($topic->courses_id);
+
+        if ($course->teacher_id != Auth::user()->id) {
+            return redirect()->route('course.index')->with('success', 'Вы не можете редактировать данный курс!');
+        }
+
+        return view('topics.edit', compact('course', 'topic'));
     }
 
     /**
@@ -98,21 +107,37 @@ class TopicController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function update(Request $request, $id)
     {
-        //
+        $topic = Topic::find($id);
+        $topic->title_top = $request->title;
+        $topic->descr_top = $request->descr;
+        $topic->deadline = $request->deadline;
+        $topic->active = $request->access ?? '';
+        $id = $topic->topic_id;
+        $topic->update();
+
+        return redirect()->route('topic.show', compact('id'))->with('success', 'Тема успешно отредактирована!');
     }
 
     /**
      * Remove the specified resource from storage.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function destroy($id)
     {
-        //
+        $topic = Topic::find($id);
+        $course = Course::find($topic->courses_id);
+
+        if ($course->teacher_id != Auth::user()->id) {
+            return redirect()->route('course.index')->withErrors('Вы не можете удалить данную тему!');
+        }
+        $topic->delete();
+
+        return redirect()->route('course.index')->with('success', 'Тема успешно удалена!');
     }
 }

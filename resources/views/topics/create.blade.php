@@ -17,7 +17,7 @@
             <input type="time" name="deadline">
         </div>
         <div class="form-check form-switch">
-            <input class="form-check-input" name="access" type="checkbox" id="flexSwitchCheckChecked" checked>
+            <input class="form-check-input" name="access" type="checkbox" id="flexSwitchCheckChecked" value="checked">
             <label class="form-check-label" for="flexSwitchCheckChecked">Доступ</label>
         </div>
         <input type="submit" value="Добавить тему" class="btn btn-success">
