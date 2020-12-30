@@ -30,6 +30,9 @@ Route::get('topic/index/{id}', 'TopicController@index')->name('topic.index');
 Route::get('topic/show/{id}', 'TopicController@show')->name('topic.show');
 Route::get('topic/create/{id}', 'TopicController@create')->name('topic.create');
 Route::post('topic/show/{id}', 'TopicController@store')->name('topic.store');
+Route::get('topic/edit/{id}', 'TopicController@edit')->name('topic.edit');
+Route::patch('topic/show/{id}', 'TopicController@update')->name('topic.update');
+Route::delete('topic/{id}', 'TopicController@destroy')->name('topic.destroy');
 
 Auth::routes();
 
