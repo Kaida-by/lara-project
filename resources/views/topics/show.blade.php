@@ -15,10 +15,13 @@
     </div>
     <div class="block-btn-test">
         @if($topic->active == 'checked')
-            <a href="" class="btn btn-outline-success">Пройти тест</a>
+            <a href="{{ route('test.index', ['id' => $topic->topic_id]) }}" class="btn btn-outline-success">Пройти тест</a>
         @else
             <p>Тесты еще не готовы</p>
-            <a href="{{ route('course.index') }}" class="btn btn-outline-primary">На главную</a>
+        @endif
+        @if($access)
+            <a href="{{ route('test.create', ['id' => $topic->topic_id]) }}" class="btn btn-outline-primary">Добавить тест</a>
+            <a href="{{ route('test.showAll', ['id' => $topic->topic_id]) }}" class="btn btn-outline-success">Посмотреть тесты</a>
         @endif
     </div>
 @endsection

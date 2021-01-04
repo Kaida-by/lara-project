@@ -34,6 +34,16 @@ Route::get('topic/edit/{id}', 'TopicController@edit')->name('topic.edit');
 Route::patch('topic/show/{id}', 'TopicController@update')->name('topic.update');
 Route::delete('topic/{id}', 'TopicController@destroy')->name('topic.destroy');
 
+Route::get('test/index/{id}', 'TestController@index')->name('test.index');
+Route::get('test/create/{id}', 'TestController@create')->name('test.create');
+Route::post('test/show/{id}', 'TestController@store')->name('test.store');
+Route::get('test/edit/{id}', 'TestController@edit')->name('test.edit');
+Route::patch('test/showOne/{id}', 'TestController@update')->name('test.update');
+Route::delete('test/{id}', 'TestController@destroy')->name('test.destroy');
+
+Route::get('test/showAll/{id}', 'TestController@showAll')->name('test.showAll');
+Route::patch('test/show/{id}', 'TestController@processingResponses')->name('test.prores');
+
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');

@@ -80,8 +80,14 @@ class TopicController extends Controller
     public function show($id)
     {
         $topic = Topic::find($id);
+        $course = Course::find($topic->courses_id);
+        $access = false;
 
-        return view('topics.show', compact('topic'));
+        if ($course->teacher_id == Auth::id()) {
+            $access = true;
+        }
+
+        return view('topics.show', compact('topic', 'access'));
     }
 
     /**
