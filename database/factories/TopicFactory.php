@@ -8,7 +8,7 @@ use Faker\Generator as Faker;
 $factory->define(Topic::class, function (Faker $faker) {
     $title = $faker->realText(rand(10,40));
     $descr = $faker->realText(rand(100, 200));
-    $time = \Carbon\Carbon::createFromTime('0', '0', '30');
+    $time = 600;
     $created = $faker->dateTimeBetween('-30 days', '-1 days');
     $updated = $faker->dateTimeBetween('-30 days', '-1 days');
 
