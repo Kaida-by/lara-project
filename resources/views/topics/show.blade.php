@@ -8,7 +8,7 @@
                 <div class="card-header">{{ $topic->title_top }}</div>
                 <div class="card-body">
                     <div class="cont">{{ $topic->descr_top }}</div>
-                    <div class="deadline-top">Время на тест: {{ $topic->deadline }}</div>
+                    <div class="deadline-top">Время на тест: {{ $topic->deadline/60 }} минут</div>
                 </div>
             </div>
         </div>

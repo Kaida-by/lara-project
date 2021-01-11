@@ -36,7 +36,7 @@ class TopicController extends Controller
             ->where('topics.courses_id', '=', $id)
             ->get();
 
-        return view('topics.index', compact('topics', 'courses', 'accessTopic', 'course'));
+        return view('topics.index', compact('topics', 'accessTopic', 'course'));
     }
 
     /**
@@ -64,8 +64,10 @@ class TopicController extends Controller
         $topic->courses_id = $course->course_id;
         $topic->title_top = $request->title;
         $topic->descr_top = $request->descr;
-        $topic->deadline = $request->deadline;
         $topic->active = $request->access ?? '';
+        $hours = substr($request->deadline, 0, 2) * 3600;
+        $minutes = substr($request->deadline, -2) * 60;
+        $topic->deadline = $hours + $minutes;
         $topic->save();
 
         return redirect()->route('topic.index', compact('id'))->with('success', 'Тема успешно добавлена!');
@@ -120,8 +122,10 @@ class TopicController extends Controller
         $topic = Topic::find($id);
         $topic->title_top = $request->title;
         $topic->descr_top = $request->descr;
-        $topic->deadline = $request->deadline;
         $topic->active = $request->access ?? '';
+        $hours = substr($request->deadline, 0, 2) * 3600;
+        $minutes = substr($request->deadline, -2) * 60;
+        $topic->deadline = $hours + $minutes;
         $id = $topic->topic_id;
         $topic->update();
 
