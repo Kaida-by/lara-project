@@ -39,8 +39,9 @@ class TestController extends Controller
         if ($course->teacher_id == Auth::id()) {
             $access = true;
         }
+        $deadline = $topic->deadline;
 
-        return view('tests.index', compact('test_arr', 'topic', 'access'));
+        return view('tests.index', compact('test_arr', 'topic', 'access', 'deadline'));
     }
 
     public function processingResponses(Request $request, $id)
