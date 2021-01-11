@@ -20,7 +20,7 @@ class CreateResultTable extends Migration
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('topic_id')->references('topic_id')->on('topics')->onDelete('cascade');
             $table->integer('score')->nullable();
-            $table->integer('start_time')->nullable();
+            $table->dateTime('start_time')->nullable();
         });
     }
 
