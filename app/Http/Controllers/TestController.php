@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Course;
 use App\Test;
 use App\Topic;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -19,7 +20,7 @@ class TestController extends Controller
     {
         $topic = Topic::find($id);
         $tests = Test::all();
-
+        $end_time = date("Y-m-d H:i:s", strtotime(Carbon::now()) + $topic->deadline);
         $test_arr = [];
         foreach ($tests as $test) {
             if ($test->topics_id == $id) {
@@ -27,34 +28,35 @@ class TestController extends Controller
             }
         }
 
-        $topic_id = new Topic();
-        $resultTopics = $topic_id->checkTopicUser(Auth::user(), $topic);
-        if ($resultTopics) {
-            $id = $topic->courses_id;
-            return redirect()->route('topic.index', compact('id'))->with('success', 'Вы уже прошли этот тест');
-        }
-
         $course = Course::find($topic->courses_id);
         $access = false;
         if ($course->teacher_id == Auth::id()) {
             $access = true;
         }
-        $deadline = $topic->deadline;
 
-        return view('tests.index', compact('test_arr', 'topic', 'access', 'deadline'));
+        $course_id = new Course();
+        $resultCourses = $course_id->checkCourseUser(Auth::user(), Course::find($topic->courses_id));
+
+        $topic_id = new Topic();
+        $resultTopics = $topic_id->checkTopicUser(Auth::user(), $topic);
+
+        if ('Доступ пока что есть' == $resultTopics['access']) {
+            $deadline = $resultTopics['topic'];
+            return view('tests.index', compact('test_arr', 'topic', 'access', 'deadline', 'resultCourses', 'course'));
+        } elseif ('Еще не проходил' == $resultTopics['access']) {
+            $deadline = strtotime(Carbon::now()) + $topic->deadline;
+            $topic->users()->attach(Auth::id(), ['start_time' => $end_time]);
+            return view('tests.index', compact('test_arr', 'topic', 'access', 'deadline', 'resultCourses', 'course'));
+        } else {
+            $id = $topic->courses_id;
+            return redirect()->route('topic.index', compact('id'))->with('success', 'Вы уже прошли этот тест');
+        }
     }
 
     public function processingResponses(Request $request, $id)
     {
         $tests = Test::all();
-
-        $topic = Topic::find($id);
         $topic_id = new Topic();
-        $resultTopics = $topic_id->checkTopicUser(Auth::user(), $topic);
-        if ($resultTopics) {
-            $id = $topic->courses_id;
-            return redirect()->route('topic.index', compact('id'))->with('success', 'Вы уже прошли этот тест');
-        }
 
         foreach ($tests as $key => $test) {
             if ($test->topics_id == $id) {
@@ -66,7 +68,6 @@ class TestController extends Controller
                         $key . '3' => $request->input('ans' . $test->test_id . '3'),
                         $key . '4' => $request->input('ans' . $test->test_id . '4')
                     ];
-
                 $true_ans[] = $test->true;
             }
         }
@@ -86,7 +87,14 @@ class TestController extends Controller
 
         $score = $score_pr / count($ar) * 100;
         $topic = Topic::find($id);
-        $topic->users()->attach(Auth::id(), ['score' => $score]);
+        $resultTopics = $topic_id->checkTopicUser(Auth::user(), $topic);
+
+        if ('Тест пройден' == $resultTopics['access']) {
+            $id = $topic->courses_id;
+            return redirect()->route('topic.index', compact('id'))->with('success', 'Вы уже прошли этот тест');
+        } else {
+            $topic->users()->updateExistingPivot(Auth::id(), ['score' => $score]);
+        }
 
         return view('tests.show', compact('score'));
     }
@@ -217,7 +225,6 @@ class TestController extends Controller
                 }
             }
         }
-        $course_id = Topic::find($test->topics_id);
 
         $test->update();
 
