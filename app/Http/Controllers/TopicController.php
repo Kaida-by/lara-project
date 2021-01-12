@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Course;
+use App\Test;
 use App\Topic;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -16,6 +17,8 @@ class TopicController extends Controller
      */
     public function index(Request $request, $id)
     {
+        $course_id = new Course();
+        $resultCourses = $course_id->checkCourseUser(Auth::user(), Course::find($id));
         if ($request->search) {
             $courses = Course::join('users', 'teacher_id', '=', 'users.id')
                 ->where('title', 'like', '%' .  $request->search  . '%')
@@ -36,7 +39,7 @@ class TopicController extends Controller
             ->where('topics.courses_id', '=', $id)
             ->get();
 
-        return view('topics.index', compact('topics', 'accessTopic', 'course'));
+        return view('topics.index', compact('topics', 'accessTopic', 'course', 'resultCourses'));
     }
 
     /**
@@ -83,13 +86,23 @@ class TopicController extends Controller
     {
         $topic = Topic::find($id);
         $course = Course::find($topic->courses_id);
+        $tests = Test::all();
+        $result_test = [];
+        foreach ($tests as $test) {
+            if ($test['topics_id'] == $id) {
+                $result_test[] = $test;
+            }
+        }
         $access = false;
 
         if ($course->teacher_id == Auth::id()) {
             $access = true;
         }
 
-        return view('topics.show', compact('topic', 'access'));
+        $course_id = new Course();
+        $resultCourses = $course_id->checkCourseUser(Auth::user(), Course::find($topic->courses_id));
+
+        return view('topics.show', compact('course','topic', 'access', 'result_test', 'resultCourses'));
     }
 
     /**
