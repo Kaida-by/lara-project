@@ -70,6 +70,9 @@ class AdminController extends Controller
             $overallMark += $grade;
             $count++;
         }
+        if (0 == $count) {
+            return redirect()->route('admin.index')->with('success', 'Вы еще не проходили тесты');
+        }
         $resultTests = $overallMark / $count;
 
         $resultTopic = [];
