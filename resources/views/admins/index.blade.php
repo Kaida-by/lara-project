@@ -6,4 +6,5 @@
     <a class="btn btn-outline-success" href="{{ route('admin.edit') }}">Радактировать профиль</a>
     <a class="btn btn-outline-success" href="{{ route('admin.showCourses') }}">Мои курсы</a>
     <a class="btn btn-outline-success" href="{{ route('admin.showPerformance') }}">Успеваемость</a>
+    <a class="btn btn-outline-success" href="{{ route('admin.calendar') }}">Календарь</a>
 @endsection
