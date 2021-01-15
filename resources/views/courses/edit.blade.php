@@ -18,6 +18,9 @@
         <div class="form-group">
             <input type="date" name="end" required value="{{ $course->end }}">
         </div>
+        <div class="form-group">
+            <input type="color" name="background" required value="{{ $course->background }}">
+        </div>
 
         <input type="submit" value="Отредактировать" class="btn btn-success">
     </form>

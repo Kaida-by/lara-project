@@ -34,6 +34,27 @@ Route::get('topic/edit/{id}', 'TopicController@edit')->name('topic.edit');
 Route::patch('topic/show/{id}', 'TopicController@update')->name('topic.update');
 Route::delete('topic/{id}', 'TopicController@destroy')->name('topic.destroy');
 
+Route::get('test/index/{id}', 'TestController@index')->name('test.index');
+Route::get('test/create/{id}', 'TestController@create')->name('test.create');
+Route::post('test/show/{id}', 'TestController@store')->name('test.store');
+Route::get('test/edit/{id}', 'TestController@edit')->name('test.edit');
+Route::patch('test/showOne/{id}', 'TestController@update')->name('test.update');
+Route::delete('test/{id}', 'TestController@destroy')->name('test.destroy');
+
+Route::get('test/showAll/{id}', 'TestController@showAll')->name('test.showAll');
+Route::patch('test/show/{id}', 'TestController@processingResponses')->name('test.prores');
+
+Route::get('admin/', 'AdminController@index')->name('admin.index');
+Route::get('admin/edit/', 'AdminController@edit')->name('admin.edit');
+Route::patch('admin/', 'AdminController@update')->name('admin.update');
+Route::get('admin/showCourses/', 'AdminController@showCourses')->name('admin.showCourses');
+Route::get('admin/showPerformance/', 'AdminController@showPerformance')->name('admin.showPerformance');
+Route::get('admin/calendar/', 'EventController@index')->name('admin.calendar');
+
+
+
+
+
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');

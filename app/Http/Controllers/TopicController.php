@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Course;
+use App\Test;
 use App\Topic;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -16,6 +17,8 @@ class TopicController extends Controller
      */
     public function index(Request $request, $id)
     {
+        $course_id = new Course();
+        $resultCourses = $course_id->checkCourseUser(Auth::user(), Course::find($id));
         if ($request->search) {
             $courses = Course::join('users', 'teacher_id', '=', 'users.id')
                 ->where('title', 'like', '%' .  $request->search  . '%')
@@ -36,7 +39,7 @@ class TopicController extends Controller
             ->where('topics.courses_id', '=', $id)
             ->get();
 
-        return view('topics.index', compact('topics', 'courses', 'accessTopic', 'course'));
+        return view('topics.index', compact('topics', 'accessTopic', 'course', 'resultCourses'));
     }
 
     /**
@@ -64,8 +67,10 @@ class TopicController extends Controller
         $topic->courses_id = $course->course_id;
         $topic->title_top = $request->title;
         $topic->descr_top = $request->descr;
-        $topic->deadline = $request->deadline;
         $topic->active = $request->access ?? '';
+        $hours = substr($request->deadline, 0, 2) * 3600;
+        $minutes = substr($request->deadline, -2) * 60;
+        $topic->deadline = $hours + $minutes;
         $topic->save();
 
         return redirect()->route('topic.index', compact('id'))->with('success', 'Тема успешно добавлена!');
@@ -80,8 +85,24 @@ class TopicController extends Controller
     public function show($id)
     {
         $topic = Topic::find($id);
+        $course = Course::find($topic->courses_id);
+        $tests = Test::all();
+        $result_test = [];
+        foreach ($tests as $test) {
+            if ($test['topics_id'] == $id) {
+                $result_test[] = $test;
+            }
+        }
+        $access = false;
 
-        return view('topics.show', compact('topic'));
+        if ($course->teacher_id == Auth::id()) {
+            $access = true;
+        }
+
+        $course_id = new Course();
+        $resultCourses = $course_id->checkCourseUser(Auth::user(), Course::find($topic->courses_id));
+
+        return view('topics.show', compact('course','topic', 'access', 'result_test', 'resultCourses'));
     }
 
     /**
@@ -114,8 +135,10 @@ class TopicController extends Controller
         $topic = Topic::find($id);
         $topic->title_top = $request->title;
         $topic->descr_top = $request->descr;
-        $topic->deadline = $request->deadline;
         $topic->active = $request->access ?? '';
+        $hours = substr($request->deadline, 0, 2) * 3600;
+        $minutes = substr($request->deadline, -2) * 60;
+        $topic->deadline = $hours + $minutes;
         $id = $topic->topic_id;
         $topic->update();
 

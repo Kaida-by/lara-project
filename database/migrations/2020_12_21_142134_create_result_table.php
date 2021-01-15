@@ -13,13 +13,14 @@ class CreateResultTable extends Migration
      */
     public function up()
     {
-        Schema::create('test_user', function (Blueprint $table) {
+        Schema::create('topic_user', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('user_id');
-            $table->unsignedBigInteger('test_id');
+            $table->unsignedBigInteger('topic_id');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-            $table->foreign('test_id')->references('test_id')->on('tests')->onDelete('cascade');
+            $table->foreign('topic_id')->references('topic_id')->on('topics')->onDelete('cascade');
             $table->integer('score')->nullable();
+            $table->dateTime('start_time')->nullable();
         });
     }
 
@@ -30,6 +31,6 @@ class CreateResultTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('test');
+        Schema::dropIfExists('topic_user');
     }
 }

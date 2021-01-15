@@ -64,6 +64,7 @@ class CourseController extends Controller
         $course->teacher_id = Auth::user()->id;
         $course->start = $request->start;
         $course->end = $request->end;
+        $course->background = $request->background;
         $course->save();
 
         $course_id = Course::find($course->course_id);
@@ -124,6 +125,7 @@ class CourseController extends Controller
         $course->descr = $request->descr;
         $course->start = $request->start;
         $course->end = $request->end;
+        $course->background = $request->background;
         $id = $course->course_id;
         $course->update();
 

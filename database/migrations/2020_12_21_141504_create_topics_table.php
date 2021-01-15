@@ -18,7 +18,7 @@ class CreateTopicsTable extends Migration
             $table->bigInteger('courses_id')->unsigned();
             $table->string('title_top');
             $table->string('descr_top');
-            $table->time('deadline');
+            $table->integer('deadline');
             $table->string('active');
             $table->timestamps();
 

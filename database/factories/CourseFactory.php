@@ -19,6 +19,7 @@ $factory->define(Course::class, function (Faker $faker) {
         'descr' => $descr,
         'start' => $start,
         'end' => $end,
+        'background' => '#76818d',
         'created_at' => $created,
         'updated_at' => $updated,
     ];
