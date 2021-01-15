@@ -22,8 +22,7 @@ class EventController extends Controller
                 $course->end, //end time (you can also use Carbon instead of DateTime)
                 'stringEventId', //optionally, you can specify an event ID
                 [
-                    'color' => '#444444',
-                    'textColor' => '#ffffff'
+                    'color' => $course->background
                 ]
             );
         }
