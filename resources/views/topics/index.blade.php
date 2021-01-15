@@ -13,7 +13,11 @@
                 @foreach($topics as $topic)
                     <div class="card">
                         <div class="card-header">{{ $topic->title_top }}</div>
-                        <a href="{{ route('topic.show', ['id' => $topic->topic_id]) }}" class="btn btn-outline-success">Перейти к теме</a>
+                        @if ($topic->active)
+                            <a href="{{ route('topic.show', ['id' => $topic->topic_id]) }}" class="btn btn-outline-success">Перейти к теме</a>
+                        @else
+                            Тема еще не доступна
+                        @endif
                         @auth
                             @if($course->teacher_id == \Illuminate\Support\Facades\Auth::id())
                                 <div class="card-btn">
