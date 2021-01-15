@@ -17,7 +17,9 @@
         <div class="form-group">
             <input type="date" name="end" required>
         </div>
-
+        <div class="form-group">
+            <input type="color" name="background">
+        </div>
         <input type="submit" value="Добавить курс" class="btn btn-success">
     </form>
 
