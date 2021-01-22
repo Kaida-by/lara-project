@@ -12,6 +12,7 @@
     <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.5.0/main.min.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@5.5.0/main.css"/>
+    <link rel="stylesheet" href={{ asset('css/style.css') }}>
 
     <script {{ asset('js/app.js') }}></script>
     <script {{ asset('js/bootstrap.js') }}></script>
@@ -49,7 +50,8 @@
             @else
                 <li class="nav-item dropdown">
                     <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                        {{ Auth::user()->name }}
+                        <img src={{ asset(Auth::user()->img ?? asset('img/user.png')) }} alt="img">
+                        {{--{{ Auth::user()->name }}--}}
                     </a>
 
                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
