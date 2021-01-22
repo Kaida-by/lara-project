@@ -7,6 +7,7 @@ use App\Topic;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class AdminController extends Controller
 {
@@ -27,6 +28,12 @@ class AdminController extends Controller
         $user = \App\User::find(Auth::id());
         $user->name = $request->name;
         $user->email = $request->email;
+
+        if ($request->file('img')) {
+            $path = Storage::putFile('public', $request->file('img'));
+            $url = Storage::url($path);
+            $user->img = $url;
+        }
 
         if ($request->password2 == $request->password3) {
             if (password_verify($request->password, $user->password)) {
