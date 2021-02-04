@@ -5,11 +5,22 @@ namespace App\Http\Controllers;
 use App\Course;
 use App\Test;
 use App\Topic;
+use Illuminate\Container\Container;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class TopicController extends Controller
 {
+
+    protected $course_id;
+    protected $topic;
+
+    public function __construct(Course $course_id, Topic $topic)
+    {
+        $this->course_id = $course_id;
+        $this->topic = $topic;
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -17,8 +28,9 @@ class TopicController extends Controller
      */
     public function index(Request $request, $id)
     {
-        $course_id = new Course();
-        $resultCourses = $course_id->checkCourseUser(Auth::user(), Course::find($id));
+
+        //$course_id = new Course();
+        $resultCourses = $this->course_id->checkCourseUser(Auth::user(), Course::find($id));
         if ($request->search) {
             $courses = Course::join('users', 'teacher_id', '=', 'users.id')
                 ->where('title', 'like', '%' .  $request->search  . '%')
@@ -62,16 +74,16 @@ class TopicController extends Controller
      */
     public function store(Request $request, $id)
     {
-        $topic = new Topic();
+        //$topic = new Topic();
         $course = Course::find($id);
-        $topic->courses_id = $course->course_id;
-        $topic->title_top = $request->title;
-        $topic->descr_top = $request->descr;
-        $topic->active = $request->access ?? '';
+        $this->topic->courses_id = $course->course_id;
+        $this->topic->title_top = $request->title;
+        $this->topic->descr_top = $request->descr;
+        $this->topic->active = $request->access ?? '';
         $hours = substr($request->deadline, 0, 2) * 3600;
         $minutes = substr($request->deadline, -2) * 60;
-        $topic->deadline = $hours + $minutes;
-        $topic->save();
+        $this->topic->deadline = $hours + $minutes;
+        $this->topic->save();
 
         return redirect()->route('topic.index', compact('id'))->with('success', 'Тема успешно добавлена!');
     }

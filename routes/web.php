@@ -48,7 +48,7 @@ Route::get('admin/', 'AdminController@index')->name('admin.index');
 Route::get('admin/edit/', 'AdminController@edit')->name('admin.edit');
 Route::patch('admin/', 'AdminController@update')->name('admin.update');
 Route::get('admin/showCourses/', 'AdminController@showCourses')->name('admin.showCourses');
-Route::get('admin/showPerformance/', 'AdminController@showPerformance')->name('admin.showPerformance');
+Route::get('admin/showPerformance/', 'AdminController@showPerformances')->name('admin.showPerformances');
 Route::get('admin/calendar/', 'EventController@index')->name('admin.calendar');
 
 

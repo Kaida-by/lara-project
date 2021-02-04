@@ -67,7 +67,7 @@ class AdminController extends Controller
         return view('admins.showCourses', compact('resultCourse'));
     }
 
-    public function showPerformance()
+    public function showPerformances()
     {
         $user = Auth::user();
         $performance = $user->showPerformance(Auth::user());
@@ -87,7 +87,7 @@ class AdminController extends Controller
         foreach ($topics as $topic) {
             foreach ($performance as $key=>$item) {
                 if ($topic->topic_id == $key) {
-                    $resultTopic[$item] = $topic;
+                    $resultTopic[$topic->topic_id] = $item;
                 }
             }
         }

@@ -11,6 +11,18 @@ use Illuminate\Support\Facades\Auth;
 
 class TestController extends Controller
 {
+
+    protected $course;
+    protected $topic;
+    protected $test;
+
+    public function __construct(Course $course, Topic $topic, Test $test)
+    {
+        $this->course = $course;
+        $this->topic = $topic;
+        $this->test = $test;
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -34,11 +46,11 @@ class TestController extends Controller
             $access = true;
         }
 
-        $course_id = new Course();
-        $resultCourses = $course_id->checkCourseUser(Auth::user(), Course::find($topic->courses_id));
+        //$course_id = new Course();
+        $resultCourses = $this->course->checkCourseUser(Auth::user(), Course::find($topic->courses_id));
 
-        $topic_id = new Topic();
-        $resultTopics = $topic_id->checkTopicUser(Auth::user(), $topic);
+        //$topic_id = new Topic();
+        $resultTopics = $this->topic->checkTopicUser(Auth::user(), $topic);
 
         if ('Доступ пока что есть' == $resultTopics['access']) {
             $deadline = $resultTopics['topic'];
@@ -56,7 +68,7 @@ class TestController extends Controller
     public function processingResponses(Request $request, $id)
     {
         $tests = Test::all();
-        $topic_id = new Topic();
+        //$topic_id = new Topic();
 
         foreach ($tests as $key => $test) {
             if ($test->topics_id == $id) {
@@ -87,7 +99,7 @@ class TestController extends Controller
 
         $score = $score_pr / count($ar) * 100;
         $topic = Topic::find($id);
-        $resultTopics = $topic_id->checkTopicUser(Auth::user(), $topic);
+        $resultTopics = $this->topic->checkTopicUser(Auth::user(), $topic);
 
         if ('Тест пройден' == $resultTopics['access']) {
             $id = $topic->courses_id;
@@ -119,15 +131,15 @@ class TestController extends Controller
      */
     public function store(Request $request, $id)
     {
-        $test = new Test();
+        //$test = new Test();
         $topic = Topic::find($id);
-        $test->topics_id = $topic->topic_id;
-        $test->question = $request->question;
-        $test->answer_1 = $request->answ_1;
-        $test->answer_2 = $request->answ_2;
-        $test->answer_3 = $request->answ_3;
-        $test->answer_4 = $request->answ_4;
-        $test->answer_5 = $request->answ_5;
+        $this->test->topics_id = $topic->topic_id;
+        $this->test->question = $request->question;
+        $this->test->answer_1 = $request->answ_1;
+        $this->test->answer_2 = $request->answ_2;
+        $this->test->answer_3 = $request->answ_3;
+        $this->test->answer_4 = $request->answ_4;
+        $this->test->answer_5 = $request->answ_5;
 
         for ($i = 1; $i <=5; $i++) {
             $req[] = $request->input('true_ans_' . $i);
@@ -137,12 +149,12 @@ class TestController extends Controller
         foreach ($req as $val_1) {
             foreach ($ans as $key_2 => $val_2) {
                 if ($val_1 - 1 == $key_2) {
-                    $test->true .= $val_2;
+                    $this->test->true .= $val_2;
                 }
             }
         }
 
-        $test->save();
+        $this->test->save();
 
         return redirect()->route('topic.show', compact('id'))->with('success', 'Тест успешно добавлен!');
     }

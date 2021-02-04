@@ -8,8 +8,11 @@ use Illuminate\Support\Facades\Auth;
 
 class CourseController extends Controller
 {
-    public function __construct()
+    protected $course;
+
+    public function __construct(Course $course)
     {
+        $this->course = $course;
         $this->middleware('auth')->except('index', 'show');
     }
 
@@ -58,16 +61,16 @@ class CourseController extends Controller
      */
     public function store(Request $request)
     {
-        $course = new Course();
-        $course->title = $request->title;
-        $course->descr = $request->descr;
-        $course->teacher_id = Auth::user()->id;
-        $course->start = $request->start;
-        $course->end = $request->end;
-        $course->background = $request->background;
-        $course->save();
+        //$course = new Course();
+        $this->course->title = $request->title;
+        $this->course->descr = $request->descr;
+        $this->course->teacher_id = Auth::user()->id;
+        $this->course->start = $request->start;
+        $this->course->end = $request->end;
+        $this->course->background = $request->background;
+        $this->course->save();
 
-        $course_id = Course::find($course->course_id);
+        $course_id = Course::find($this->course->course_id);
         $course_id->users()->attach(Auth::user()->id);
 
         return redirect()->route('course.index')->with('success', 'Курс успешно добавлен!');
@@ -81,8 +84,8 @@ class CourseController extends Controller
      */
     public function show($id)
     {
-        $course_id = new Course();
-        $resultCourses = $course_id->checkCourseUser(Auth::user(), Course::find($id));
+        //$course_id = new Course();
+        $resultCourses = $this->course->checkCourseUser(Auth::user(), Course::find($id));
 
         $course = Course::join('users', 'teacher_id', '=', 'users.id')
             ->find($id);
