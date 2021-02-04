@@ -6,8 +6,8 @@
     <br>
     <br>
     @foreach($resultTopic as $key => $topic)
-        Тема: {{ $topic->title_top }}
-        Оценка: {{ $key }}
+        Тема: {{ $key }}
+        Оценка: {{ $topic }}
         <br>
     @endforeach
 
